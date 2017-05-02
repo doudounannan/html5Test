@@ -27,7 +27,15 @@ colors.setTheme({
 // 开始时间
 var startTime = Date.now();
 
-// first screen capture + load time
+// first screen capture + load time start
+page.onResourceRequested = function(request) {
+  console.log('Request ' + JSON.stringify(request, undefined, 4));
+};
+
+page.onResourceReceived = function(response) {
+  console.log('Receive ' + JSON.stringify(response, undefined, 4));
+};
+
 page.open(testObj.url, function(status) {
 	console.log('\nFirst screen start:'.debug);
 
@@ -44,3 +52,4 @@ page.open(testObj.url, function(status) {
 
 	phantom.exit();
 });
+// first screen capture + load time start

@@ -4,6 +4,7 @@
   "description": "回归测试",
   "main": "index.js",
   "scripts": {
+    "start": "phantomjs index.js",
     "test": "",
     "inspect": "eslint index.js"
   },
