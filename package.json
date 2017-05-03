@@ -4,9 +4,10 @@
   "description": "回归测试",
   "main": "index.js",
   "scripts": {
-    "start": "phantomjs index.js",
+    "test-phantomjs": "phantomjs phantom.js",
+    "test-casper": "casperjs casper.js",
     "test": "",
-    "inspect": "eslint index.js"
+    "lint": "eslint *.js --fix"
   },
   "author": "zhengmeiyu@baidu.com",
   "license": "MIT",
