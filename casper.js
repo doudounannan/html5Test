@@ -10,7 +10,7 @@ function getLinks() {
 }
 
 // Opens casperjs homepage
-casper.start('http://m.baidu.com/');
+casper.start('http://casperjs.org/');
 
 casper.then(function () {
     links = this.evaluate(getLinks);
