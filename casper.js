@@ -1,18 +1,8 @@
-/**
- *  [colorizer module]
-    ERROR: white text on red background
-	INFO: green text
-	TRACE: green text
-	PARAMETER: cyan text
-	COMMENT: yellow text
-	WARNING: red text
-	GREEN_BAR: white text on green background
-	RED_BAR: white text on red background
-	INFO_BAR: cyan text
-	WARN_BAR: white text on orange background
- */
+var casper = require('casper').create({
+    verbose: true,
+    logLevel: 'debug'
+});
 
-var casper = require('casper').create();
 var mouse = require("mouse").create(casper);
 
 var opts = {
@@ -33,12 +23,18 @@ testObj.url = 'https://m.baidu.com/';
 testObj.type = {
 	// 截图
 	screen: ' 截图 - '
-}
+};
 
 casper.start(testObj.url, function() {
-	this.echo(this.getTitle());
+	this.emit('baidu.loaded');
+});
+
+casper.on('baidu.loaded', function() {
+	casper.log('baidu loaded');
+	casper.log(this.getTitle());
 	this.capture(opts.screenCaptureDirectory + 'baidu-homepage.png');
-	this.echo(opts.feedback.success + testObj.type.screen + '首页', 'INFO');
+	casper.log(opts.feedback.success + testObj.type.screen + '首页', 'info');
+	this.waitForSelector('form[id="index-form"]');
 });
 
 // 天气展开和收起
@@ -47,25 +43,37 @@ casper.then(function() {
 	this.mouse.click('.icon-down');
 	this.wait(1000).then(function () {
 		this.capture(opts.screenCaptureDirectory + 'baidu-weather-exand.png');
-		this.echo(opts.feedback.success + testObj.type.screen + '首页-天气 -> 展开', 'INFO');
+		casper.log(opts.feedback.success + testObj.type.screen + '首页-天气 -> 展开', 'info');
 
 		// 天气收起
 		this.mouse.click('.icon-weather-toggle');
 		this.wait(1000).then(function () {
 			this.capture(opts.screenCaptureDirectory + 'baidu-weather-collapse.png');
-			this.echo(opts.feedback.success + testObj.type.screen + '首页-天气 -> 收起', 'INFO');
+			casper.log(opts.feedback.success + testObj.type.screen + '首页-天气 -> 收起', 'info');
 		});
 	});
 
 });
 
-// TODO: 回流条
-// casper.then(function () {
-// 	this.mouse.click('.bf-main-style .bf-open-btn');
-// 	this.wait(1000).then(function () {
-// 		this.capture(opts.screenCaptureDirectory + 'baidu-backflow.png');
-// 		this.echo(opts.feedback.success + testObj.type.screen + '首页-底部浮层 -> 回流', 'INFO');
-// 	});
-// });
+// 落地页-图文
+casper.then(function() {
+	this.mouse.click('.tpl-3');
+	this.wait(1000).then(function () {
+		this.capture(opts.screenCaptureDirectory + 'baidu-landing-text.png');
+		casper.log(opts.feedback.success + testObj.type.screen + '首页-落地页 -> 图文', 'info');
+		this.mouse.click('.sf-back');
+		this.wait(1000).then(function () {
+			this.capture(opts.screenCaptureDirectory + 'baidu-landing-text-back.png');
+			casper.log(opts.feedback.success + testObj.type.screen + '首页-落地页 -> 图文-返回首页', 'info');
+		});
+	});
+});
+
+// 搜索
+casper.then(function() {
+   this.fill('form[id="index-form"]', { word: '百度' }, true);
+   this.capture(opts.screenCaptureDirectory + 'baidu-search-input.png');
+   casper.log(opts.feedback.success + testObj.type.screen + '首页-搜索 -> 输入', 'info');
+});
 
 casper.run();

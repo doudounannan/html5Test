@@ -41,14 +41,13 @@ page.open(testObj.url, function(status) {
 
 	if(status === 'success') {
 		console.log('Loading time ' + (Date.now() - startTime) + ' msec');
-		page.render('screenCapture/baidu-first_screen_capture.png');
+		page.render('screenCapture/baidu-homepage.png');
 		console.log('[Success] '.info + ' to generate first screen capture.');
 	} else {
 	  	console.log('[FAIL]'.error + ' to load the address!');
 	}
 
 	console.log('First screen end!\n'.debug);
-
 
 	phantom.exit();
 });
