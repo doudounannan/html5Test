@@ -6,12 +6,10 @@
 
 - phantomjs
 - slimerjs
-
-### 依赖
-
-- colors
 - eslint
 - casperjs
+
+### 依赖
 
 ## 代码检查
 

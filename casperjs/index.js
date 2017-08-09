@@ -3,6 +3,8 @@ var receiveResourceNum = 0;
 var receiveResourceSuccessNum = 0;
 var captureIndex = 1;
 
+var dump = require('utils').dump;
+
 var casper = require('casper').create({
     // set iphone 5s device size
     // TODO: height dont work
@@ -60,11 +62,41 @@ var casper = require('casper').create({
     }
 });
 
-var url = 'https://m.baidu.com';
-var webpageName = 'baidu';
+// dump(casper.cli.options);
+
+var url = casper.cli.options.url || 'https://m.baidu.com';
+var webpageName = casper.cli.options.name || 'baidu';
 var captureDirectory = 'captureRepo/';
 
+// event listen start
+casper.on('loaded', function(title) {
+    this.echo(webpageName + ' page title: ' + title, 'WARN_BAR');
+});
+
+casper.on('http.status.200', function(resource) {
+    this.echo('[OK] ' + resource.url, 'INFO');
+});
+
+casper.on('http.status.301', function(resource) {
+    this.echo('[Permanently redirected] ' + resource.url, 'PARAMETER');
+});
+
+casper.on('http.status.302', function(resource) {
+    this.echo('[Temporarily redirected] ' + resource.url, 'PARAMETER');
+});
+
+casper.on('http.status.404', function(resource) {
+    this.echo('[Not found] ' + resource.url, 'COMMENT');
+});
+
+casper.on('http.status.500', function(resource) {
+    this.echo('[Server error] ' + resource.url, 'ERROR');
+});
+// event listen end
+
 casper.start(url, function () {
+    this.emit('loaded', this.getTitle());
+
     return 'start: ' + url;
 });
 
